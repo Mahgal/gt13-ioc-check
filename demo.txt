@@ -1,0 +1,14 @@
+$ gt13_ioc_check.py --demo
+BEFORE -- raw access log: 6 lines, 3 GT13 traces hiding in plain sight
+  1 203.0.113.7 - - [25/Nov/2026:10:00:01 +0000] "GET /health HTTP/1.1" 200 15 "-" "curl/8.5.0"
+  2 45.92.229.10 - - [25/Nov/2026:10:01:12 +0000] "POST /loginSrp1 HTTP/1.1" 200 512 "-" "Mozilla/5.0"
+  3 198.51.100.9 - - [25/Nov/2026:10:02:40 +0000] "GET /index.html HTTP/1.1" 200 1024 "-" "Mozilla/5.0 (Windows NT 10.0; Win64; x64)"
+  4 198.51.100.23 - - [25/Nov/2026:10:03:55 +0000] "GET /zult HTTP/1.1" 404 178 "https://data-zt.newpayapp.com/" "curl/8.5.0"
+  5 203.0.113.44 - - [25/Nov/2026:10:05:19 +0000] "POST /loginSrp1 HTTP/1.1" 200 640 "-" "Mozilla/5.0 (X11; Linux x86_64) research"
+  6 203.0.113.91 - - [25/Nov/2026:10:06:02 +0000] "GET /robots.txt HTTP/1.1" 200 88 "-" "Mozilla/5.0 (compatible; Googlebot/2.1)"
+AFTER -- gt13_ioc_check.py fixtures/sample.log:
+line 2 [ip] 45.92.229.10 :: 45.92.229.10 - - [25/Nov/2026:10:01:12 +0000] "POST /loginSrp1 HTTP/1.1" 200 512 "-" "Mozilla/5.0"
+line 4 [domain] data-zt.newpayapp.com :: 198.51.100.23 - - [25/Nov/2026:10:03:55 +0000] "GET /zult HTTP/1.1" 404 178 "https://data-zt.newpayapp.com/" "curl/8.5.0"
+line 5 [user-agent] Mozilla/5.0 (X11; Linux x86_64) research :: 203.0.113.44 - - [25/Nov/2026:10:05:19 +0000] "POST /loginSrp1 HTTP/1.1" 200 640 "-" "Mozilla/5.0 (X11; Linux x86_64) research"
+scanned 6 lines (0 skipped), 3 hits: domain=1 user-agent=1 ip=1 hassh=0 artifact=0
+RESULT: HITS FOUND -- investigate these lines now
